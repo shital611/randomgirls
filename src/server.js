@@ -243,7 +243,17 @@ app.get('/GetAlluser', async (req, res) => {
         console.log(err)
     })
 })
+//het pool detail
 
+app.get('/GetPoolDetail',async (req,res)=>{
+    try{
+     const getUsers=await poolSchema.find({}).sort({"PoolID":1})
+     res.status(201).send(getUsers)
+    }catch(e){
+         res.status(400).send(e)
+    }
+    
+ })
 
 //GetParticularPoolDetail
 
