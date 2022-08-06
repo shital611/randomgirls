@@ -36,6 +36,10 @@ app.use(session({
 app.get('/login',(req,res) => {
         res.render('login')
 })
+
+app.get('/logout',(req,res) => {
+    res.redirect('/login')
+})
 app.post('/login',async(req,res) => {
     try {
     const email = req.body.email
