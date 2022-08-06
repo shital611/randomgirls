@@ -1,0 +1,21 @@
+const mongoose = require('mongoose');
+
+var urlSchema = new mongoose.Schema({
+    sr_no: {
+        type: Number,
+        required: 'This field is required.'
+    },
+    url_link: {
+        type: String,
+        required: 'This field is required.'
+    },
+    url_desc: {
+        type: String,
+        required: 'This field is required.'
+    }
+});
+
+
+const url_schema = new mongoose.model('urlSchema', urlSchema);
+
+module.exports = url_schema

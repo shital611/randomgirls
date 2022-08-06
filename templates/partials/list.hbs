@@ -1,0 +1,31 @@
+<h3><a class="btn btn-secondary" href="/addvideo"><i class="fa fa-plus"></i> Create New</a> Video URL List</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Sr_no</th>
+            <th>Video Title</th>
+            <th>Video Link</th>
+            <th>Video</th>
+            <th>Video Description</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each list}}
+     
+        <tr>
+            <td>{{this.sr_no}}</td>
+            <td>{{this.url_title}}</td>
+            <td><a target="_blank" href="{{video_file}}">{{video_file}}</td>
+            <td><a href="{{{this.video_file}}}"><video src="{{{video_file}}}"  class="img-thumbnail" id="video" height="150" width="75"></td></a>
+            <td>{{this.url_desc}}</td>
+            <td>
+                <a href="/updatevideo/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+                <a href="/deletevideo/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        {{/each}}
+
+       
+    </tbody>
+</table>
