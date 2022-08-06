@@ -1,0 +1,34 @@
+<h3>All User Detail</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>UserID</th>
+            <th>Name</th>
+            <th>ProfilePic</th>
+            <th>PhoneNo</th>
+            <th>Address</th>
+            <th>Coins</th>
+            <th>OTP</th>
+            <th>CreatedDate</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each list1}}
+        <tr>
+            <td>{{this.UserID}}</td>
+            <td>{{this.Name}}</td>
+            <td><a target="_blank" href="{{ProfilePic}}">{{ProfilePic}}</td>
+            <td>{{this.PhoneNo}}</td>
+            <td>{{this.Address}}</td>
+            <td>{{this.Coins}}</td>
+            <td>{{this.OTP}}</td>
+            <td>{{this.CreatedDate}}</td>
+            
+            <td>
+                {{!-- <a href="/updateuser/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a> --}}
+                <a href="/deleteuser/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -13,50 +13,92 @@
     {{>navbar}}
     <div class="row">
         <div class="col-md-6 offset-md-3" style="background-color: #fff;margin-top: 25px;padding:20px;">
-            <form action="/updatevideo/{{urldata._id}}" method="POST" autocomplete="off">
+            <form action="/updatepool/{{urldata._id}}" method="POST" autocomplete="off">
                 <input type="hidden" name="_id" value="{{urldata._id}}">
                 <div class="form-group">
-                    <label>Sr_no</label>
-                    <input type="text" class="form-control" name="sr_no" required placeholder="serial no"
-                        value="{{urldata.sr_no}}">
+                    <label>PoolID</label>
+                    <input type="text" class="form-control" name="PoolID" required placeholder="PoolID "
+                        value="{{urldata.PoolID}}">
                 </div>
                 <div class="form-group">
-                    <label>Video Title</label>
-                    <input type="text" class="form-control" name="url_title" required placeholder="Video URL"
-                        value="{{urldata.url_title}}">
-                </div>
-                <div class="form-group">
-                    <label>Video Link</label>
-                    <input type="text" class="form-control" name="url_video_file" required placeholder="Video URL"
-                        value="{{urldata.video_file}}">
-                </div>
+                    <label>PoolName</label>
+                    <input type="text" class="form-control" name="PoolName" required placeholder="PoolName"
+                        value="{{urldata.PoolName}}">
+                </div>             
                 <div class="col-sm-5">
                     <div class="card">
                         <div class="card-body">
-                            <input type="file" name="video" class="custom-file-input" id="inputGroupFile01"
-                                onchange="document.getElementById('video').src = window.URL.createObjectURL(this.files[0])"
+                            <input type="file" name="Hemper1" class="custom-file-input" id="inputGroupFile01"
+                                onchange="document.getElementById('Hemper1').src = window.URL.createObjectURL(this.files[0])"
                                 aria-describedby="inputGroupFileAddon01">
-                            <label class="custom-file-label" for="inputGroupFile01">Video</label>
-                            <video src="{{{urldata.video_file}}}" class="img-thumbnail" id="video">
+                            <label class="custom-file-label" for="inputGroupFile01">Hemper1</label>
+                            <video src="{{{urldata.Hemper1}}}" class="img-thumbnail" id="Hemper1">
                         </div>
                     </div>
-                    <p class="mt-3" style="font-size:small;font-weight:600">Upload Video</p>
+                    <p class="mt-3" style="font-size:small;font-weight:600">Upload Image</p>
+                </div>             
+                <div class="form-group">
+                    <label>Hemper1Worth</label>
+                    <input type="text" class="form-control" name="Hemper1Worth" required placeholder="Hemper1Worth"
+                        value="{{urldata.Hemper1Worth}}">
+                </div>            
+                <div class="col-sm-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <input type="file" name="Hemper2" class="custom-file-input" id="inputGroupFile01"
+                                onchange="document.getElementById('Hemper2').src = window.URL.createObjectURL(this.files[0])"
+                                aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">Hemper2</label>
+                            <video src="{{{urldata.Hemper2}}}" class="img-thumbnail" id="Hemper2">
+                        </div>
+                    </div>
+                    <p class="mt-3" style="font-size:small;font-weight:600">Upload Image</p>
+                </div>
+                <div class="form-group">
+                    <label>Hemper2Worth</label>
+                    <input type="text" class="form-control" name="Hemper2Worth" required placeholder="Hemper2Worth"
+                        value="{{urldata.Hemper2Worth}}">
+               
+                <div class="col-sm-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <input type="file" name="Hemper3" class="custom-file-input" id="inputGroupFile01"
+                                onchange="document.getElementById('Hemper3').src = window.URL.createObjectURL(this.files[0])"
+                                aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">Hemper3</label>
+                            <video src="{{{urldata.Hemper3}}}" class="img-thumbnail" id="Hemper3">
+                        </div>
+                    </div>
+                    <p class="mt-3" style="font-size:small;font-weight:600">Upload Image</p>
+                </div>
+                <div class="form-group">
+
+                    <label>Hemper3Worth</label>
+                    <input type="text" class="form-control" name="Hemper3Worth" required placeholder="Hemper3Worth"
+                        value="{{urldata.Hemper3Worth}}">
+                </div>
+                <div class="form-group">
+                    <label>CoinsNeededToParticipate</label>
+                    <input type="text" class="form-control" name="CoinsNeededToParticipate" required
+                        placeholder="CoinsNeededToParticipate" value="{{urldata.CoinsNeededToParticipate}}">
+                </div>
+                <div class="form-group">
+                    <label>PoolStartDate</label>
+                    <input type="text" class="form-control" name="PoolStartDate" required placeholder="PoolStartDate"
+                        value="{{urldata.PoolStartDate}}">
                 </div>
 
                 <div class="form-group">
-                    <label>Video Description</label>
-                    <input type="text" class="form-control" name="url_desc" required placeholder="Video Description"
-                        value="{{urldata.url_desc}}">
+                    <label>PoolEndDate</label>
+                    <input type="text" class="form-control" name="PoolEndDate" required placeholder="PoolEndDate"
+                        value="{{urldata.PoolEndDate}}">
                 </div>
-
                 <div class="form-group">
                     <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
-                    <a class="btn btn-secondary" href="/getvideos"><i class="fa fa-list-alt"></i> View All</a>
+                    <a class="btn btn-secondary" href="/getpool"><i class="fa fa-list-alt"></i> View All</a>
                 </div>
             </form>
         </div>
     </div>
-
 </body>
-
 </html>

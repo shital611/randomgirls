@@ -7,33 +7,24 @@ const dotenv = require('dotenv')
 const bodyparser = require('body-parser')
 const Admin = require('./models/adminSchema')
 const poolSchema = require('./models/urlSchema')
-
-const fs = require('fs');
-const multer = require('multer');
-
+const usersData=require('./models/users')
 const upload_file = require('./helpers/image_helper.js')
-
-
 dotenv.config();
 connectDatabase();
 app.use(bodyparser.urlencoded({
     extended: true
 }));
-
 app.use(express.static('./assets/videos')); 
 
 app.use(bodyparser.json());
 const PORT = process.env.PORT || 3000
-
 const static_path = path.join(__dirname, '../public')
 const template_path = path.join(__dirname, '../templates/views')
 const partials_path = path.join(__dirname, '../templates/partials')
-
 app.use(express.static(static_path))
 app.set('view engine', 'hbs')
 app.set('views', template_path)
 hbs.registerPartials(partials_path)
-
 const session = require("express-session");
 const { v4: uuidv4 } = require("uuid");
 
@@ -42,12 +33,9 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
-
-
 app.get('/login',(req,res) => {
         res.render('login')
 })
-
 app.post('/login',async(req,res) => {
     try {
     const email = req.body.email
@@ -69,41 +57,11 @@ app.post('/login',async(req,res) => {
    }
 })
 
-// app.get('/addvideo',(req,res) => {
-//     res.render('add')
-// })
+
+
 app.get('/addpool',async(req,res) => {
     res.render('add')
 })
-
-// app.post('/addvideo',upload_file.single('video'), async(req,res) => {
-
-//     try {
-//         console.log(req.file)
-//         var url = new urlSchema()
-//         url.sr_no = req.body.sr_no
-//         url.url_title = req.body.url_title
-//         url.url_desc = req.body.url_desc
-//         url.video_file = req.file.filename;
-        
-//         console.log(url)
-//         await url.save((err,data) => {
-//             if(!err)
-//             {
-//                 // res.render('index', {
-//                 //     list: data
-//                 // });
-
-//                 res.redirect('/getvideos')
-//             }
-//             else
-//                 console.log(err)
-//         })
-        
-//         } catch (error) {
-//             res.status(400).send(error.message)
-//        }
-// })
 
 app.post('/addpool',upload_file.single('Hemper1'),function (req,res){
     //fileSave();
@@ -130,51 +88,6 @@ app.post('/addpool',upload_file.single('Hemper1'),function (req,res){
     console.log('Error during record insertion : ' + err);  
    });
  
-
-// app.post('/addvideo',upload_file.single('video'),function (req,res){
-//     //fileSave();
-//     // console.log(req.file);
-//     var data = new urlSchema();
- 
-//     data.sr_no = req.body.sr_no;
-//     data.url_link = req.body.url_link;
-//     data.url_desc = req.body.url_desc;
-//    data.video_file = req.file.filename;
-//     // data.video_file = req.file.files;
-//     var save = data.save();
-       
-//     if (save)
-//        res.redirect('/');
-//     else
-//     console.log('Error during record insertion : ' + err);  
-//    });
-   
-
-
-// Dsiplay Data 
-// app.get('/getvideos', (req,res) => {
-
-    // if(req.session.user){
-    //     res.render('index', {user : req.session.user})
-
-        
-    // }else{
-    //     res.send("Unauthorize User")
-    // }
-
-//     urlSchema.find((err, data) => {
-//         if (!err) {
-//             res.render('index', {
-//                 list: data
-//             });
-//         }
-//         else {
-//             console.log('Error in retrieving url list :' + err);
-//         }
-//     })
-
-    
-// })
 app.get('/getpool', async(req,res) => {
     poolSchema.find((err, data) => {
         if (!err) {
@@ -189,23 +102,7 @@ app.get('/getpool', async(req,res) => {
 
     
 })
-
-
-// To show select data on update element on edit.hbs page
-//  app.get('/updatevideo/:id', (req, res) => {
-//     urlSchema.findById({_id:req.params.id},req.body, { new: true },(err,docs)=>{
-//         console.log(docs)
-//        if(err)
-//        {
-//            console.log('Cant retrieve data and edit');
-//        }
-//        else
-//        {
-//            res.render('edit',{urldata:docs});
-//        }
-//     })
-//  });
- app.get('/updatepool/:id', async(req, res) => {
+app.get('/updatepool/:id', async(req, res) => {
     poolSchema.findById({_id:req.params.id},req.body, { new: true },(err,docs)=>{
         console.log(docs)
        if(err)
@@ -218,21 +115,6 @@ app.get('/getpool', async(req,res) => {
        }
     })
  });
-  
- // Now Update Data here using ID
-// app.post('/updatevideo/:id',(req,res)=>{
-//     console.log(req.body)
-//       urlSchema.findByIdAndUpdate({_id:req.params.id},req.body,(err,docs)=>{
-//           if(err)
-//           {
-//               console.log('Error');
-//           }  
-//           else
-//           {  
-//               res.redirect('/getvideos');
-//           }
-//       });
-// });
 app.post('/updateuser/:id',async(req,res)=>{
     console.log(req.body)
     poolSchema.findByIdAndUpdate({_id:req.params.id},req.body,(err,docs)=>{
@@ -247,17 +129,6 @@ app.post('/updateuser/:id',async(req,res)=>{
       });
 });
 
-// Delete data
-// app.get('/deletevideo/:id', async (req, res) => {
-//     var uid = req.params.id
-//     urlSchema.findByIdAndRemove(uid, (err, doc) => {
-//         if (!err) {
-//             res.redirect('/getvideos');
-//         }
-//         else { console.log('Error in video delete :' + err); }
-//     });
-// });
-
 app.get('/deletepool/:id', async (req, res) => {
     var uid = req.params.id
     poolSchema.findByIdAndRemove(uid, (err, doc) => {
@@ -269,31 +140,8 @@ app.get('/deletepool/:id', async (req, res) => {
 });
 
 
-
-/*app.post('/addlink', async (req, res) => {
-    const data = new urlSchema({
-        sr_no : 1,
-        url_link : "https://youtu.be/jcOKU9f86XE",
-        url_desc: "software testing"
-    })
-
-    const data = new urlSchema()
-    data.sr_no = req.body.sr_no
-    data.url_link = req.body.url_link
-    data.url_desc = req.body.url_desc
-
-
-    data.save().then((result) => {
-        res.send(result)
-    }).catch((err) => {
-        console.log(err)
-    })
-})*/
-
-
-// api to get all videos
-app.get('/getallvideos', async (req, res) => {
-    urlSchema.find().then((result) => {
+app.get('/GetAllPools', async (req, res) => {
+    poolSchema.find().then((result) => {
         res.json(result)
 
 
@@ -301,6 +149,149 @@ app.get('/getallvideos', async (req, res) => {
         console.log(err)
     })
 })
+
+
+app.get('/adduser',async(req,res) => {
+    res.render('adduser')
+})
+
+app.post('/adduser',upload_file.single('Profile_Pic'),function (req,res){
+    //fileSave();
+    // console.log(req.file);
+    var data = new usersData();
+ 
+    data.UserID = req.body.UserID;
+    data.Name = req.body.Name;
+   data.ProfilePic = req.file.filename;
+   data.Hemper1Worth = req.body.Hemper1Worth;
+   data.PhoneNo = req.body.PhoneNo;
+   data.Address = req.body.Address;
+   data.Coins = req.body.Coins;
+   data.OTP = req.body.OTP;
+   data.CreatedDate = req.body.CreatedDate;
+    var save = data.save();
+       
+    if (save)
+       res.redirect('/getuser');
+    else
+    console.log('Error during record insertion : ' + err);  
+   });
+
+   app.get('/getuser', async(req,res) => {
+    usersData.find((err, data1) => {
+        if (!err) {
+            res.render('index1', {
+                list1: data1
+            });
+        }
+        else {
+            console.log('Error in retrieving url list :' + err);
+        }
+    })    
+})
+
+
+app.get('/updateuser/:id', async(req, res) => {
+    usersData.findById({_id:req.params.id},req.body, { new: true },(err,docs)=>{
+        console.log(docs)
+       if(err)
+       {
+           console.log('Cant retrieve data and edit');
+       }
+       else
+       {
+           res.render('edit',{urldata:docs});
+       }
+    })
+ });
+
+ app.post('/updateuser/:id',async(req,res)=>{
+    console.log(req.body)
+    poolSchema.findByIdAndUpdate({_id:req.params.id},req.body,(err,docs)=>{
+          if(err)
+          {
+              console.log('Error');
+          }  
+          else
+          {  
+              res.redirect('/getuser');
+          }
+      });
+});
+
+
+app.get('/deleteuser/:id', async (req, res) => {
+    var uid = req.params.id
+    usersData.findByIdAndRemove(uid, (err, doc) => {
+        if (!err) {
+            res.redirect('/getuser');
+        }
+        else { console.log('Error in video delete :' + err); }
+    });
+});
+
+app.get('/GetAlluser', async (req, res) => {
+    poolSchema.find().then((result) => {
+        res.json(result)
+
+
+    }).catch((err) => {
+        console.log(err)
+    })
+})
+
+
+//GetParticularPoolDetail
+
+app.get('/GetParticularPoolDetail/:id', async (req, res) => {
+    try {
+        const _id = req.params.id
+        const getUsers = await poolSchema.findById(_id)
+        res.send(getUsers)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+
+
+//get user detail
+app.get('/GetUserDetail',async (req,res)=>{
+    try{
+     const getUsers=await usersData.find({}).sort({"UserID":1})
+     res.status(201).send(getUsers)
+    }catch(e){
+         res.status(400).send(e)
+    }
+    
+ })
+
+
+
+ //get user detail by id
+ app.get('/GetUserDetail/:id',async (req,res)=>{
+    try{
+    const _id=req.params.id
+    const getUsers=await usersData.findById(_id)
+    res.send(getUsers)
+    }catch(e){
+         res.status(400).send(e)
+    }
+    
+ })
+
+ 
+
+ app.delete('/GetUserDetail/:id',async (req,res)=>{
+    try{
+    const _id=req.params.id
+    const getUsers=await usersData.findById(_id)
+    res.send(getUsers)
+    }catch(e){
+         res.status(400).send(e)
+    }
+    
+ })
 
 
 app.listen(PORT,()=>{
