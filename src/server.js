@@ -152,7 +152,7 @@ app.post('/addpool',upload_file.single('Hemper1'),function (req,res){
 
 
 // Dsiplay Data 
-app.get('/getvideos', (req,res) => {
+// app.get('/getvideos', (req,res) => {
 
     // if(req.session.user){
     //     res.render('index', {user : req.session.user})
