@@ -51,6 +51,6 @@ const urlSchema=new mongoose.Schema({
     }
 
 })
-const url_schema = new mongoose.model('video1Schema', urlSchema);
+const url_schema = new mongoose.model('pool', urlSchema);
 
 module.exports = url_schema
