@@ -1,31 +1,41 @@
-<h3><a class="btn btn-secondary" href="/addvideo"><i class="fa fa-plus"></i> Create New</a> Video URL List</h3>
+<h3><a class="btn btn-secondary" href="/addpool"><i class="fa fa-plus"></i> Create New</a> All Pools Detail</h3>
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Sr_no</th>
-            <th>Video Title</th>
-            <th>Video Link</th>
-            <th>Video</th>
-            <th>Video Description</th>
+            <th>PoolID</th>
+            <th>PoolName</th>
+            <th>Hemper1</th>
+            <th>Hemper1Worth</th>
+            <th>Hemper2</th>
+            <th>Hemper2Worth</th>
+            <th>Hemper3</th>
+            <th>Hemper3Worth</th>
+            <th>CoinsNeededToParticipate</th>
+            <th>PoolStartDate</th>
+            <th>PoolEndDate</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         {{#each list}}
-     
         <tr>
-            <td>{{this.sr_no}}</td>
-            <td>{{this.url_title}}</td>
-            <td><a target="_blank" href="{{video_file}}">{{video_file}}</td>
-            <td><a href="{{{this.video_file}}}"><video src="{{{video_file}}}"  class="img-thumbnail" id="video" height="150" width="75"></td></a>
-            <td>{{this.url_desc}}</td>
+            <td>{{this.PoolID}}</td>
+            <td>{{this.PoolName}}</td>
+            <td><a target="_blank" href="{{Hemper1}}">{{Hemper1}}</td>
+            <td>{{this.Hemper1Worth}}</td>
+            <td><a target="_blank" href="{{Hemper2}}">{{Hemper2}}</td>
+            <td>{{this.Hemper2Worth}}</td>
+            <td><a target="_blank" href="{{Hemper3}}">{{Hemper3}}</td>
+            <td>{{this.Hemper3Worth}}</td>
+            <td>{{this.CoinsNeededToParticipate}}</td>
+            <td>{{this.PoolStartDate}}</td>
+            <td>{{this.PoolEndDate}}</td>
+
             <td>
-                <a href="/updatevideo/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
-                <a href="/deletevideo/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+                <a href="/updatepool/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
+                <a href="/deletepool/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
             </td>
         </tr>
         {{/each}}
-
-       
     </tbody>
 </table>

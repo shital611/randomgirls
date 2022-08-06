@@ -6,7 +6,7 @@ const connectDatabase = require('./db/conn.js')
 const dotenv = require('dotenv')
 const bodyparser = require('body-parser')
 const Admin = require('./models/adminSchema')
-const urlSchema = require('./models/urlSchema')
+const poolSchema = require('./models/urlSchema')
 
 const fs = require('fs');
 const multer = require('multer');
@@ -44,36 +44,6 @@ app.use(session({
 }));
 
 
-// app.get('/',(req,res) => {
-//     // res.redirect('/login')
-
-//     res.send(req.file.filename)
-// })
-
-
-// app.get('/register',(req,res) => {
-//     const data = new Admin({
-//         // email : "admin@admin.com",
-//         // password : "123456"
-//         email : "user@admin.com",
-//         password : "456789"
-//     })
-
-//     data.save().then((result) => {
-//         res.send(result)
-//     }).catch((err) => {
-//         console.log(err)
-//     })
-// })
-
-// app.get('/getalllink', async (req, res) => {
-//     Admin.find().then((result) => {
-//         res.send(result)
-//     }).catch((err) => {
-//         console.log(err)
-//     })
-// })
-
 app.get('/login',(req,res) => {
         res.render('login')
 })
@@ -87,14 +57,9 @@ app.post('/login',async(req,res) => {
     
     if(adminemail.password === password){
         req.session.user = req.body.email;
-        // if(req.session.user){
-        //     // console.log(req.session.user)        
-        // }else{
-        //     res.send("Unauthorize User")
-        // }
+
         res.render('index', {user : req.session.user})    
-        // res.status(201).redirect('/getvideos')
-        // res.end("Login Successful")
+       
     }
     else{
         res.send("Invalid login details")
@@ -104,57 +69,85 @@ app.post('/login',async(req,res) => {
    }
 })
 
-app.get('/addvideo',(req,res) => {
+// app.get('/addvideo',(req,res) => {
+//     res.render('add')
+// })
+app.get('/addpool',async(req,res) => {
     res.render('add')
 })
 
-app.post('/addvideo',upload_file.single('video'), async(req,res) => {
+// app.post('/addvideo',upload_file.single('video'), async(req,res) => {
 
-    try {
-        console.log(req.file)
-        var url = new urlSchema()
-        url.sr_no = req.body.sr_no
-        url.url_title = req.body.url_title
-        url.url_desc = req.body.url_desc
-        url.video_file = req.file.filename;
+//     try {
+//         console.log(req.file)
+//         var url = new urlSchema()
+//         url.sr_no = req.body.sr_no
+//         url.url_title = req.body.url_title
+//         url.url_desc = req.body.url_desc
+//         url.video_file = req.file.filename;
         
-        console.log(url)
-        await url.save((err,data) => {
-            if(!err)
-            {
-                // res.render('index', {
-                //     list: data
-                // });
+//         console.log(url)
+//         await url.save((err,data) => {
+//             if(!err)
+//             {
+//                 // res.render('index', {
+//                 //     list: data
+//                 // });
 
-                res.redirect('/getvideos')
-            }
-            else
-                console.log(err)
-        })
+//                 res.redirect('/getvideos')
+//             }
+//             else
+//                 console.log(err)
+//         })
         
-        } catch (error) {
-            res.status(400).send(error.message)
-       }
-})
+//         } catch (error) {
+//             res.status(400).send(error.message)
+//        }
+// })
 
-
-app.post('/addvideo',upload_file.single('video'),function (req,res){
+app.post('/addpool',upload_file.single('Hemper1'),function (req,res){
     //fileSave();
     // console.log(req.file);
-    var data = new urlSchema();
+    var data = new poolSchema();
  
-    data.sr_no = req.body.sr_no;
-    data.url_link = req.body.url_link;
-    data.url_desc = req.body.url_desc;
-   data.video_file = req.file.filename;
-    // data.video_file = req.file.files;
+    data.PoolID = req.body.PoolID;
+    data.PoolName = req.body.PoolName;
+    // data.url_desc = req.body.url_desc;
+   data.Hemper1 = req.file.filename;
+   data.Hemper1Worth = req.body.Hemper1Worth;
+   data.Hemper2 = req.file.filename;
+   data.Hemper2Worth = req.body.Hemper2Worth;
+   data.Hemper3 = req.file.filename;
+   data.Hemper3Worth = req.body.Hemper3Worth;
+   data.CoinsNeededToParticipate = req.body.CoinsNeededToParticipate;
+   data.PoolStartDate = req.body.PoolStartDate;
+   data.PoolEndDate = req.body.PoolEndDate;
     var save = data.save();
        
     if (save)
-       res.redirect('/');
+       res.redirect('/getpool');
     else
     console.log('Error during record insertion : ' + err);  
    });
+ 
+
+// app.post('/addvideo',upload_file.single('video'),function (req,res){
+//     //fileSave();
+//     // console.log(req.file);
+//     var data = new urlSchema();
+ 
+//     data.sr_no = req.body.sr_no;
+//     data.url_link = req.body.url_link;
+//     data.url_desc = req.body.url_desc;
+//    data.video_file = req.file.filename;
+//     // data.video_file = req.file.files;
+//     var save = data.save();
+       
+//     if (save)
+//        res.redirect('/');
+//     else
+//     console.log('Error during record insertion : ' + err);  
+//    });
    
 
 
@@ -169,7 +162,21 @@ app.get('/getvideos', (req,res) => {
     //     res.send("Unauthorize User")
     // }
 
-    urlSchema.find((err, data) => {
+//     urlSchema.find((err, data) => {
+//         if (!err) {
+//             res.render('index', {
+//                 list: data
+//             });
+//         }
+//         else {
+//             console.log('Error in retrieving url list :' + err);
+//         }
+//     })
+
+    
+// })
+app.get('/getpool', async(req,res) => {
+    poolSchema.find((err, data) => {
         if (!err) {
             res.render('index', {
                 list: data
@@ -185,8 +192,21 @@ app.get('/getvideos', (req,res) => {
 
 
 // To show select data on update element on edit.hbs page
- app.get('/updatevideo/:id', (req, res) => {
-    urlSchema.findById({_id:req.params.id},req.body, { new: true },(err,docs)=>{
+//  app.get('/updatevideo/:id', (req, res) => {
+//     urlSchema.findById({_id:req.params.id},req.body, { new: true },(err,docs)=>{
+//         console.log(docs)
+//        if(err)
+//        {
+//            console.log('Cant retrieve data and edit');
+//        }
+//        else
+//        {
+//            res.render('edit',{urldata:docs});
+//        }
+//     })
+//  });
+ app.get('/updatepool/:id', async(req, res) => {
+    poolSchema.findById({_id:req.params.id},req.body, { new: true },(err,docs)=>{
         console.log(docs)
        if(err)
        {
@@ -200,30 +220,54 @@ app.get('/getvideos', (req,res) => {
  });
   
  // Now Update Data here using ID
-app.post('/updatevideo/:id',(req,res)=>{
+// app.post('/updatevideo/:id',(req,res)=>{
+//     console.log(req.body)
+//       urlSchema.findByIdAndUpdate({_id:req.params.id},req.body,(err,docs)=>{
+//           if(err)
+//           {
+//               console.log('Error');
+//           }  
+//           else
+//           {  
+//               res.redirect('/getvideos');
+//           }
+//       });
+// });
+app.post('/updateuser/:id',async(req,res)=>{
     console.log(req.body)
-      urlSchema.findByIdAndUpdate({_id:req.params.id},req.body,(err,docs)=>{
+    poolSchema.findByIdAndUpdate({_id:req.params.id},req.body,(err,docs)=>{
           if(err)
           {
               console.log('Error');
           }  
           else
           {  
-              res.redirect('/getvideos');
+              res.redirect('/getuser');
           }
       });
 });
 
 // Delete data
-app.get('/deletevideo/:id', async (req, res) => {
+// app.get('/deletevideo/:id', async (req, res) => {
+//     var uid = req.params.id
+//     urlSchema.findByIdAndRemove(uid, (err, doc) => {
+//         if (!err) {
+//             res.redirect('/getvideos');
+//         }
+//         else { console.log('Error in video delete :' + err); }
+//     });
+// });
+
+app.get('/deletepool/:id', async (req, res) => {
     var uid = req.params.id
-    urlSchema.findByIdAndRemove(uid, (err, doc) => {
+    poolSchema.findByIdAndRemove(uid, (err, doc) => {
         if (!err) {
-            res.redirect('/getvideos');
+            res.redirect('/getpool');
         }
         else { console.log('Error in video delete :' + err); }
     });
 });
+
 
 
 /*app.post('/addlink', async (req, res) => {
