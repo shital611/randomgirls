@@ -9,6 +9,7 @@ var adminSchema = new mongoose.Schema({
         type: String,
         required: 'This field is required.'
     }
+    
 });
 
 

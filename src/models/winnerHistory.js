@@ -24,9 +24,10 @@ const winnerHistorySchema=new mongoose.Schema({
         type:Number,
         required:true,
         unique:true
-    }
-    
+    }   
 })
+
+
 
 const winnerHistoryData=new mongoose.model("WinnerHistory",winnerHistorySchema)
 module.exports=winnerHistoryData

@@ -3,7 +3,7 @@ const userSchema=new mongoose.Schema({
     UserID:{
         type:Number,
         //required:true,
-        unique:true
+        // unique:true
     },
     Name:{
         type:String,
@@ -12,13 +12,13 @@ const userSchema=new mongoose.Schema({
     },
     ProfilePic:{
         type:String,
-        required:true,
+        
         trim:true
     },
     PhoneNo:{
         type:Number,
       
-  },
+    },
     Address:{
         type:String,
         required:true,
@@ -26,7 +26,7 @@ const userSchema=new mongoose.Schema({
     },
     Coins:{
         type:Number,
-        required:true,
+        
     },
     OTP:{
         type:Number
@@ -34,9 +34,13 @@ const userSchema=new mongoose.Schema({
     },
     CreatedDate:{
         type:Date
-        
-    }
+     },
+     Password:{
+        type:String
+     }
 
 })
+
+
 const usersData=new mongoose.model("Users",userSchema)
 module.exports=usersData
