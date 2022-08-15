@@ -9,6 +9,7 @@ const Admin = require('./models/adminSchema')
 const poolSchema = require('./models/urlSchema')
 const usersData = require('./models/users')
 const participantsData = require('./models/participants')
+const winnner = require('./models/winnerHistory')
 
 let dir = './uploads';
 let multer = require('multer')
@@ -401,7 +402,7 @@ app.listen(PORT, () => {
    
     var data = new usersData();
     data.Password=req.body.Password
-    data.otp=Math.floor(100000 + Math.random() * 900000)
+    
     data.Name = req.body.Name;
     // data.ProfilePic =req.files[3] && req.files[3].filename ? req.files[3].filename : '';
     // data.ProfilePic=req.file.filename
@@ -409,8 +410,8 @@ app.listen(PORT, () => {
     data.Address = req.body.Address;
     var save = data.save();
     if (save){
-     res.send(data)
-    }
+     res.status(201).send(data,Math.floor(100000 + Math.random() * 900000))
+   }
     else
         console.log('Error during record insertion : ' + err);
 });
@@ -433,6 +434,22 @@ app.post('/ParticipateInPool', async (req, res) => {
 })
 
 
+ //make winner
+ app.post('/MakeWinner', async (req, res) => {
+    const data = new winnner({
+        PoolID: req.body.PoolID,
+        Winner1UserID: req.body.Winner1UserID,
+        Winner2UserID: req.body.Winner2UserID,
+        Winner3UserID: req.body.Winner3UserID,
+    })
+    try {
+        const dataToSave = await data.save();
+        res.status(200).json(dataToSave)
+    }
+    catch (error) {
+        res.status(400).json({message: error.message})
+    }
+})
 
 
 
