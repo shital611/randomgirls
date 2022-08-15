@@ -16,7 +16,10 @@ const participantsSchema=new mongoose.Schema({
         type:Number,
         required:true,
         //unique:true
-    }   
-})
+    }
+}
+,{
+    versionKey: false
+} )
 const participantsData=new mongoose.model("Participants",participantsSchema)
 module.exports=participantsData

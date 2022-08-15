@@ -49,8 +49,11 @@ const urlSchema=new mongoose.Schema({
     PoolEndDate:{
         type:Date
     }
-
-})
+}
+,{
+    versionKey: false
+}
+)
 const url_schema = new mongoose.model('pool', urlSchema);
 
 module.exports = url_schema
