@@ -401,6 +401,7 @@ app.listen(PORT, () => {
  app.post('/RegisterUser',upload.any() ,function(req, res) {
    
     var data = new usersData();
+   
     data.Password=req.body.Password
     
     data.Name = req.body.Name;
@@ -410,7 +411,7 @@ app.listen(PORT, () => {
     data.Address = req.body.Address;
     var save = data.save();
     if (save){
-     res.status(201).send(data,Math.floor(100000 + Math.random() * 900000))
+     res.status(201).send(Math.floor(100000 + Math.random() * 900000))
    }
     else
         console.log('Error during record insertion : ' + err);
@@ -450,6 +451,24 @@ app.post('/ParticipateInPool', async (req, res) => {
         res.status(400).json({message: error.message})
     }
 })
+
+//getallwinners
+app.get('/GetAllWinners',async (req,res)=>{
+    try{
+     const getallwinners = await winnner.find({})
+     res.status(201).send(getallwinners)
+    }catch(e){
+         res.status(400).send(e)
+    }
+ })
+
+
+//GetPoolWinner
+ app.get('/GetPoolWinner/:PoolID', async(req, res) => {
+    winnner.find(({PoolID:req.params.PoolID}), (err,docs)=>{
+        res.send(docs)
+    })
+ });
 
 
 
