@@ -31,7 +31,5 @@ const winnerHistorySchema=new mongoose.Schema({
     versionKey: false
 })
 
-
-
 const winnerHistoryData=new mongoose.model("WinnerHistory",winnerHistorySchema)
 module.exports=winnerHistoryData

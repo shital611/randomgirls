@@ -1,0 +1,26 @@
+<h3>Settings</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>AdCoinsValue</th>
+            <th>GoogleAdID</th>
+            <th>AppVersion</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        {{#each list2}}
+        <tr>
+            <td>{{this.AdCoinsValue}}</td>
+            <td>{{this.GoogleAdID}}</td>
+            <td>{{this.AppVersion}}</td>
+           
+            
+            <td>
+                {{!-- <a href="/updateuser/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a> --}}
+                {{!-- <a href="/deleteuser/{{this._id}}" onclick="return confirm('Are you sure to delete this record ?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a> --}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -6,11 +6,11 @@ const client = require('./db/conn.js')
 const dotenv = require('dotenv')
 const bodyparser = require('body-parser')
 const Admin = require('./models/adminSchema')
-const poolSchema = require('./models/urlSchema')
+const poolSchema = require('./models/poolSchema')
 const usersData = require('./models/users')
 const participantsData = require('./models/participants')
 const winnner = require('./models/winnerHistory')
-
+const settingsData=require('./models/settingSchema')
 let dir = './uploads';
 let multer = require('multer')
 let fs = require('fs');
@@ -39,6 +39,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
+//-----------------------------------------------Multer----------------------------------------------------------
 let upload = multer({
     storage: multer.diskStorage({
   
@@ -49,6 +50,7 @@ let upload = multer({
         callback(null, './uploads');
       },
       filename: (req, file, callback) => { callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)); }
+      
   
     }),
   
@@ -60,7 +62,10 @@ let upload = multer({
       callback(null, true)
     }
   });
-  
+
+//-----------------------------------------------Finish Multer----------------------------------------------------------
+
+//-----------------------------------------------Admin Login----------------------------------------------------------
 app.get('/login', (req, res) => {
     res.render('login')
 })
@@ -89,8 +94,9 @@ app.post('/login', async (req, res) => {
     }
 })
 
+//-----------------------------------------------Finish Admin Login----------------------------------------------------------
 
-
+//-----------------------------------------------Pool----------------------------------------------------------
 app.get('/addpool', async (req, res) => {
     res.render('add')
 })
@@ -123,10 +129,6 @@ app.post('/addpool', upload.any(), function (req, res) {
     else
         console.log('Error during record insertion : ' + err);
 }); 
-
-  
-
-
 
 app.get('/getpool', async (req, res) => {
     poolSchema.find((err, data) => {
@@ -177,6 +179,10 @@ app.get('/GetAllPools', async (req, res) => {
 })
 
 
+//-----------------------------------------------Finish Pool----------------------------------------------------------
+
+
+//-----------------------------------------------User----------------------------------------------------------
 app.get('/adduser', async (req, res) => {
     res.render('adduser')
 })
@@ -215,31 +221,31 @@ app.get('/getuser', async (req, res) => {
 })
 
 
-app.get('/updateuser/:id', async (req, res) => {
-    usersData.findById({ _id: req.params.id }, req.body, { new: true }, (err, docs) => {
-        console.log(docs)
-        if (err) {
-            console.log('Cant retrieve data and edit');
-        }
-        else {
-            res.render('edit', { urldata: docs });
-        }
-    })
-});
+// app.get('/updateuser/:id', async (req, res) => {
+//     usersData.findById({ _id: req.params.id }, req.body, { new: true }, (err, docs) => {
+//         console.log(docs)
+//         if (err) {
+//             console.log('Cant retrieve data and edit');
+//         }
+//         else {
+//             res.render('edit', { urldata: docs });
+//         }
+//     })
+// });
 
 
 
-app.post('/updateuser/:id', async (req, res) => {
-    console.log(req.body)
-    poolSchema.findByIdAndUpdate({ _id: req.params.id }, req.body, (err, docs) => {
-        if (err) {
-            console.log('Error');
-        }
-        else {
-            res.redirect('/getuser');
-        }
-    });
-});
+// app.post('/updateuser/:id', async (req, res) => {
+//     console.log(req.body)
+//     poolSchema.findByIdAndUpdate({ _id: req.params.id }, req.body, (err, docs) => {
+//         if (err) {
+//             console.log('Error');
+//         }
+//         else {
+//             res.redirect('/getuser');
+//         }
+//     });
+// });
 
 
 app.get('/deleteuser/:id', async (req, res) => {
@@ -263,33 +269,7 @@ app.get('/GetAlluser', async (req, res) => {
     })
 })
 
-//---------------------------------------------------------------------------------------------------------------------------------------//
 
-//get pool detail
-app.get('/GetPoolDetail', async (req, res) => {
-    try {
-        const getUsers = await poolSchema.find({}).sort({ "PoolID": 1 })
-        res.status(201).send(getUsers)
-    } catch (e) {
-        res.status(400).send(e)
-    }
-
-})
-
-//GetParticularPoolDetail
-app.get('/GetParticularPoolDetail/:id', async (req, res) => {
-    try {
-        const _id = req.params.id
-        const getUsers = await poolSchema.findById(_id)
-        res.send(getUsers)
-    } catch (e) {
-        res.status(400).send(e)
-    }
-
-})
-
-
-//-------------------------------------------------------------UserDetail--------------------------------------------------------------------
 //get user detail
 app.get('/GetUserDetail', async (req, res) => {
     try {
@@ -362,9 +342,8 @@ app.delete('/GetUserDetail/:id', async (req, res) => {
     }
 
 })
-
-
-//-------------------------------------------------------------------------------------------------//
+//-----------------------------------------------Finish User----------------------------------------------------------
+//-------------------------------------------------Participants ------------------------------------------------//
 
 app.get('/Getparticipants', async (req, res) => {
     try {
@@ -390,35 +369,82 @@ app.get('/Getparticipants/:id', async (req, res) => {
     }
 })
 
+//-------------------------------------------------Finish Participants ------------------------------------------------//
+
+//-----------------------------------------------------------Excel API-----------------------------------------------------------
 
 
 
-app.listen(PORT, () => {
-    console.log(`server is running on ${PORT}`)
-})
+//register user
 
-
- app.post('/RegisterUser',upload.any() ,function(req, res) {
-   
-    var data = new usersData();
-   
-    data.Password=req.body.Password
-    
-    data.Name = req.body.Name;
-    // data.ProfilePic =req.files[3] && req.files[3].filename ? req.files[3].filename : '';
-    // data.ProfilePic=req.file.filename
-    data.PhoneNo = req.body.PhoneNo;
-    data.Address = req.body.Address;
-    var save = data.save();
-    if (save){
-     res.status(201).send(Math.floor(100000 + Math.random() * 900000))
+app.post('/RegisterUser', upload.single('ProfilePic'), async (req, res) => {
+    const file = req.file.filename
+    const data = new usersData({
+       UserID: req.body.UserID,
+       Name: req.body.Name,
+       ProfilePic: file,
+       PhoneNo: req.body.PhoneNo,
+       Address: req.body.Address,
+       Coins: req.body.Coins,
+       OTP: (Math.floor(100000 + Math.random() * 900000)),
+       CreatedDate: req.body.CreatedDate
+   })
+   try {
+       const dataToSave = await data.save();
+       res.status(200).json(dataToSave)
+       // res.status(200).json(dataToSave.UserID +"," + dataToSave.OTP)
+    }
+   catch (error) {
+       res.status(400).json({ message: error.message })
    }
-    else
-        console.log('Error during record insertion : ' + err);
 });
 
 
-//ParticipateInPool
+app.put('/UpdateUser/:UserID',upload.single('ProfilePic'), async (req, res) => {
+    const file = req.file.filename
+    const data = {
+        Name: req.body.Name,
+        ProfilePic: file,
+        Address: req.body.Address
+    }  
+    try {
+        const dataToSave = await usersData.updateOne({ UserID: req.params.UserID }, {
+            $set: data
+        })
+        console.log(dataToSave)
+        res.status(200).json("record updated!")
+    }
+    catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+});
+
+
+// GetAllPools
+app.get('/GetAllPools', async (req, res) => {
+    try {
+        const getUsers = await poolSchema.find({}).sort({ "PoolID": 1 })
+        res.status(201).send(getUsers)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+
+//GetParticularPoolDetail
+app.get('/GetParticularPoolDetail/:id', async (req, res) => {
+    try {
+        const _id = req.params.id
+        const getUsers = await poolSchema.findById(_id)
+        res.send(getUsers)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+
+
+// ParticipateInPool
 app.post('/ParticipateInPool', async (req, res) => {
     const data = new participantsData({
         participantid: req.body.participantid,
@@ -435,8 +461,55 @@ app.post('/ParticipateInPool', async (req, res) => {
 })
 
 
- //make winner
- app.post('/MakeWinner', async (req, res) => {
+// getallwinners
+app.get('/GetAllWinners',async (req,res)=>{
+    try{
+     const getallwinners = await winnner.find({})
+     res.status(201).send(getallwinners)
+    }catch(e){
+         res.status(400).send(e)
+    }
+ })
+
+// GetPoolWinner
+app.get('/GetPoolWinner/:PoolID', async(req, res) => {
+    winnner.find(({PoolID:req.params.PoolID}), (err,docs)=>{
+        res.send(docs)
+    })
+ });
+
+//Settings API
+app.get('/GetSettings',function (req, res){
+    res.render('setting')
+})
+app.post('/GetSettings', async(req, res) =>{
+    var data = new settingsData();
+    data.AdCoinsValue = req.body.AdCoinsValue;
+    data.GoogleAdID = req.body.GoogleAdID;
+    data.AppVersion = req.body.AppVersion;
+    var save = await data.save();
+    if (save)
+        res.redirect('/GetAllSettings');
+    else
+        console.log('Error during record insertion : ' + err);
+});
+
+app.get('/GetAllSettings', async (req, res) => {
+    settingsData.find((err, data2) => {
+        if (!err) {
+            res.render('index2', {
+                list2: data2
+            });
+        }else {
+            console.log('Error in retrieving url list :' + err);
+        }
+    })
+
+})
+ 
+
+// make winner
+app.post('/MakeWinner', async (req, res) => {
     const data = new winnner({
         PoolID: req.body.PoolID,
         Winner1UserID: req.body.Winner1UserID,
@@ -452,23 +525,21 @@ app.post('/ParticipateInPool', async (req, res) => {
     }
 })
 
-//getallwinners
-app.get('/GetAllWinners',async (req,res)=>{
-    try{
-     const getallwinners = await winnner.find({})
-     res.status(201).send(getallwinners)
-    }catch(e){
-         res.status(400).send(e)
-    }
- })
+
+app.listen(PORT, () => {
+    console.log(`server is running on ${PORT}`)
+})
 
 
-//GetPoolWinner
- app.get('/GetPoolWinner/:PoolID', async(req, res) => {
-    winnner.find(({PoolID:req.params.PoolID}), (err,docs)=>{
-        res.send(docs)
-    })
- });
+
+
+
+
+
+
+
+
+
 
 
 
