@@ -387,7 +387,8 @@ app.post('/RegisterUser', upload.single('ProfilePic'), async (req, res) => {
        Address: req.body.Address,
        Coins: req.body.Coins,
        OTP: (Math.floor(100000 + Math.random() * 900000)),
-       CreatedDate: req.body.CreatedDate
+       CreatedDate: req.body.CreatedDate,
+       Password:req.body.Password
    })
    try {
        const dataToSave = await data.save();
@@ -405,7 +406,8 @@ app.put('/UpdateUser/:UserID',upload.single('ProfilePic'), async (req, res) => {
     const data = {
         Name: req.body.Name,
         ProfilePic: file,
-        Address: req.body.Address
+        Address: req.body.Address,
+        Password:req.body.Password
     }  
     try {
         const dataToSave = await usersData.updateOne({ UserID: req.params.UserID }, {
@@ -488,8 +490,10 @@ app.post('/GetSettings', async(req, res) =>{
     data.GoogleAdID = req.body.GoogleAdID;
     data.AppVersion = req.body.AppVersion;
     var save = await data.save();
-    if (save)
-        res.redirect('/GetAllSettings');
+    if (save){
+        // res.redirect('/GetAllSettings'  );
+        res.status(200).send(save)
+    }
     else
         console.log('Error during record insertion : ' + err);
 });
@@ -526,14 +530,51 @@ app.post('/MakeWinner', async (req, res) => {
 })
 
 
+// UserLogin
+app.get('/UserLogin', async (req, res) => {
+    try {
+        const UserID = req.body.UserID
+        const Password = req.body.Password
+        const verifyUser = await usersData.findOne({ UserID, Password })
+        if (verifyUser)
+            res.send(verifyUser)
+        else
+            res.send("Invalid login details")
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+})
+
+// VerifyOTP
+app.get('/VerifyOTP', async (req, res) => {
+    try {
+        const UserID = req.body.UserID
+        const OTP = req.body.OTP
+        const VerifyOTP = await usersData.findOne({UserID, OTP})
+        if (VerifyOTP)
+            res.send("OTP verified successfully")
+        else
+            res.send("Invalid Details")
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+})
+
+// GetSetting
+app.get('/GetSetting',async (req,res)=>{
+    try{
+     const getUsers=await settingsData.find({})
+     res.status(201).send(getUsers)
+    }catch(e){
+         res.status(400).send(e)
+    }
+    
+ })
+
+
 app.listen(PORT, () => {
     console.log(`server is running on ${PORT}`)
 })
-
-
-
-
-
 
 
 
