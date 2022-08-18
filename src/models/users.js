@@ -7,7 +7,7 @@ const userSchema=new mongoose.Schema({
     },
     Name:{
         type:String,
-        required:true,
+        // required:true,
         trim:true
     },
     ProfilePic:{
@@ -21,7 +21,7 @@ const userSchema=new mongoose.Schema({
     },
     Address:{
         type:String,
-        required:true,
+        // required:true,
         trim:true
     },
     Coins:{

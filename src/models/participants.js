@@ -22,4 +22,4 @@ const participantsSchema=new mongoose.Schema({
     versionKey: false
 } )
 const participantsData=new mongoose.model("Participants",participantsSchema)
-module.exports=participantsData
+module.exports=participantsData           

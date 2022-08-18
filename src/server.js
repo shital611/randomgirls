@@ -32,6 +32,7 @@ hbs.registerPartials(partials_path)
 const session = require("express-session");
 const { v4: uuidv4 } = require("uuid");
 const { fail } = require('assert')
+const { json } = require('body-parser')
 
 app.use(session({
     secret: uuidv4(), //  '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
@@ -454,7 +455,7 @@ app.post('/ParticipateInPool', async (req, res) => {
         poolid: req.body.poolid,
     })
     try {   
-        const dataToSave = await data.save();
+        const dataToSave =   data.save();
         res.status(200).json(dataToSave)
     }
     catch (error) {
@@ -491,8 +492,8 @@ app.post('/GetSettings', async(req, res) =>{
     data.AppVersion = req.body.AppVersion;
     var save = await data.save();
     if (save){
-        // res.redirect('/GetAllSettings'  );
-        res.status(200).send(save)
+        res.send('Data inserted successfully' );
+        
     }
     else
         console.log('Error during record insertion : ' + err);
@@ -545,6 +546,8 @@ app.get('/UserLogin', async (req, res) => {
     }
 })
 
+
+
 // VerifyOTP
 app.get('/VerifyOTP', async (req, res) => {
     try {
@@ -560,6 +563,8 @@ app.get('/VerifyOTP', async (req, res) => {
     }
 })
 
+
+
 // GetSetting
 app.get('/GetSetting',async (req,res)=>{
     try{
@@ -571,7 +576,30 @@ app.get('/GetSetting',async (req,res)=>{
     
  })
 
+ //EarnCoins
+ app.put('/EarnCoins/:UserID', async (req, res) => {
+    
+    const data = {
+        Coins:req.body.Coins
+    }  
+    try {
+        const dataToSave = await usersData.updateOne({ UserID: req.params.UserID }, {
+            $set: data
+        })
+        // console.log(dataToSave)
+        res.status(200).json("record updated!")
+    }
+    catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+    settingsData.find(({AdCoinsValue:req.body.AdCoinsValue}), (err,docs)=>{
+        // res.send(docs)
+        console.log(docs)
+    })
+});
+ 
 
+ 
 app.listen(PORT, () => {
     console.log(`server is running on ${PORT}`)
 })
