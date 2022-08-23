@@ -15,7 +15,8 @@ var dbConn = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'loot-le-buddy'
+    database: 'loot-le-buddy',
+    ssl_disabled:True
 });
 // connect to database
 dbConn.connect();
