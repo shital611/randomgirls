@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
     <title>Node.js express mongDB CRUD</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-
 <body class="bg-info">
     {{>navbar}}
     <div class="row">
@@ -57,24 +54,23 @@
                         <input type="text" class="form-control" name="Coins" required placeholder="Coins"
                             value="{{urldata.Coins}}">
                     </div>
+
                     <div class="form-group">
                         <label>OTP</label>
                         <input type="text" class="form-control" name="OTP" required placeholder="OTP"
                             value="{{urldata.OTP}}">
                     </div>
+
                     <div class="form-group">
                         <label>CreatedDate</label>
                         <input type="text" class="form-control" name="CreatedDate" required placeholder="CreatedDate"
                             value="{{urldata.CreatedDate}}">
                     </div>
 
-
                     <div class="form-group">
                         <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
                         <a class="btn btn-secondary" href="/getuser"><i class="fa fa-list-alt"></i> View All</a>
                     </div>
-
-
             </form>
         </div>
     </div>

@@ -25,7 +25,6 @@ const winnerHistorySchema=new mongoose.Schema({
         required:true,
         unique:true
     } 
-
 }
 ,{
     versionKey: false

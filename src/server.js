@@ -180,10 +180,10 @@ app.get('/GetAllPools', async (req, res) => {
 })
 
 
-//-----------------------------------------------Finish Pool----------------------------------------------------------
+//-----------------------------------------------Finish Pool--------------------------------------------------
 
 
-//-----------------------------------------------User----------------------------------------------------------
+//-----------------------------------------------User---------------------------------------------------------
 app.get('/adduser', async (req, res) => {
     res.render('adduser')
 })
@@ -599,20 +599,30 @@ app.get('/GetSetting',async (req,res)=>{
 });
  
 
- 
+    
 app.listen(PORT, () => {
     console.log(`server is running on ${PORT}`)
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
+         
+app.get('/coins',async (req,res)=>{
+    try{
+    client.usersData.find()
+        client.settingsData.find()
+        client.usersData.aggregate([
+            {
+                $lookup:{
+                    from:"settingsData",
+                    localField:"AdCoinsValue",
+                    foreignField:'Coins',
+                    AS:"myCoins"
+                }
+            }
+        ])
+      
+    }catch(e){
+         res.status(400).send(e)
+    }
+    
+ })

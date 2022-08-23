@@ -16,3 +16,4 @@ const settingSchema=new mongoose.Schema({
 } )
 const settingsData=new mongoose.model("SettingsTable",settingSchema)
 module.exports=settingsData
+
