@@ -11,6 +11,8 @@ const usersData = require('./models/users')
 const participantsData = require('./models/participants')
 const winnner = require('./models/winnerHistory')
 const settingsData=require('./models/settingSchema')
+const OrdersData=require('./models/ordersSchema')
+const ProductsData=require('./models/productsSchema')
 let dir = './uploads';
 let multer = require('multer')
 let fs = require('fs');
@@ -435,17 +437,28 @@ app.get('/GetAllPools', async (req, res) => {
 })
 
 //GetParticularPoolDetail
-app.get('/GetParticularPoolDetail/:id', async (req, res) => {
-    try {
-        const _id = req.params.id
-        const getUsers = await poolSchema.findById(_id)
-        res.send(getUsers)
-    } catch (e) {
-        res.status(400).send(e)
-    }
 
+app.get('/GetParticularPoolDetail/:poolid', function(req,res){
+    // var poolid = req.params.poolid
+    // console.log(poolid)
+    participantsData.aggregate([
+        { $lookup:
+            {
+              from: 'users',
+              localField: 'UserID',
+              foreignField: 'UserID',
+              as: 'UserDetails'
+            }
+          }
+        ,{ $match : { poolid : Number(req.params.poolid) } }
+        ] ).then((result) => {
+            // console.log(result);
+            res.send(result)
+          })
+          .catch((error) => {
+            console.log(error);
+          });
 })
-
 
 // ParticipateInPool
 app.post('/ParticipateInPool', async (req, res) => {
@@ -498,6 +511,9 @@ app.post('/GetSettings', async(req, res) =>{
     else
         console.log('Error during record insertion : ' + err);
 });
+
+
+
 
 app.get('/GetAllSettings', async (req, res) => {
     settingsData.find((err, data2) => {
@@ -605,24 +621,24 @@ app.listen(PORT, () => {
 })
 
 
-         
-app.get('/coins',async (req,res)=>{
-    try{
-    client.usersData.find()
-        client.settingsData.find()
-        client.usersData.aggregate([
-            {
-                $lookup:{
-                    from:"settingsData",
-                    localField:"AdCoinsValue",
-                    foreignField:'Coins',
-                    AS:"myCoins"
-                }
-            }
-        ])
-      
-    }catch(e){
-         res.status(400).send(e)
+app.put('/UpdateUser1/:UserID',upload.single('ProfilePic'), async (req, res) => {
+ 
+    const data = {
+       
+        Coins: req.body.Coins + to(req.body.Coins),
+
+    }  
+    try {
+        const dataToSave = await usersData.updateOne({ UserID: req.params.UserID }, {
+            $set: data
+        })
+        console.log(dataToSave)
+        res.status(200).json("record updated!")
     }
-    
- })
+    catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+});
+
+
+
