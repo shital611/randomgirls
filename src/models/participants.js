@@ -2,24 +2,24 @@ const mongoose=require('mongoose')
 const participantsSchema=new mongoose.Schema({
     ParticipantID:{
         type:Number,
-        required:true,
+        // required:true,
         unique:true
-    },
+    },  
 
     PoolID:{
         type:Number,
-        required:true,
+        // required:true,
      
     },
     
     UserID:{
         type:Number,
-        required:true,
+        // required:true,
         //unique:true
     }
 }
 ,{
     versionKey: false
 } )
-const participantsData=new mongoose.model("Participants",participantsSchema)
+const participantsData=new mongoose.model("Participant",participantsSchema)
 module.exports=participantsData           

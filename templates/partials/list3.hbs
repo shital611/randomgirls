@@ -1,0 +1,16 @@
+<h3>All User Detail From Particular PoolID </h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>ProfilePic</th>   
+        </tr>
+    </thead>
+    <tbody>
+        {{#each list3}}
+        <tr>
+            <td>{{this.Name}}</td>
+            <td><a target="_blank" href="{{this.ProfilePic}}"><img onchange="document.getElementById('image').src = window.URL.createObjectURL(this.files[0])" src="{{{this.ProfilePic}}}"  class="img-thumbnail" height="50" width="75"></a></td>
+        {{/each}}
+    </tbody>
+</table>
