@@ -24,8 +24,7 @@ router.get('/Getparticipants/:id', async (req, res) => {
 
 // ParticipateInPool
 router.post('/ParticipateInPool',  async(req, res)=> {
-    //fileSave();
-    // console.log(req.file);
+    
     var data = new participantSchema();
     data.ParticipantID= req.body.ParticipantID
     data.UserID= req.body.UserID
